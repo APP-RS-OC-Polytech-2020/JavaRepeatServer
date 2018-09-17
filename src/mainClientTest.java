@@ -26,12 +26,12 @@ public class mainClientTest {
 			clientSocket = new Socket(ipServer, port);
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			out.println("{\"type\":\"Init\",\"infoInit\":\"Client-->Server  demande de connexion\", \"clientName\": \""+""+"\", \"clientType\":\"Java\"}");
-			out.println("{\"type\":\"Message\",\"message\":\"test1\"}");
-			out.println("{\"type\":\"Message\",\"message\":\"test2\"}");
-			out.println("{\"type\":\"Message\",\"message\":\"test3\"}");
-			out.println("{\"type\":\"Message\",\"message\":\"test4\"}");
-			out.println("{\"type\":\"Message\",\"message\":\"test5\"}");
+			out.println("{\"type\":\"init\",\"infoInit\":\"Client-->Server  demande de connexion\", \"clientName\": \""+""+"\", \"clientType\":\"Java\"}");
+			out.println("{\"type\":\"message\",\"message\":\"test1\"}");
+			out.println("{\"type\":\"message\",\"message\":\"test2\"}");
+			out.println("{\"type\":\"message\",\"message\":\"test3\"}");
+			out.println("{\"type\":\"message\",\"message\":\"test4\"}");
+			out.println("{\"type\":\"message\",\"message\":\"test5\"}");
 			//try {TimeUnit.MILLISECONDS.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}
 			String inLine="";
 			while(true){//&&inLine!=null){//lecture des nouveau message

@@ -66,5 +66,8 @@ public class ConnexionRobotino implements Runnable {
 			System.out.println("CoRobo\tJSON: "+j);
 		}
 	}
+	public void envoyerMessage(String m){
+		out.println(m);
+	}
 
 }

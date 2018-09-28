@@ -62,5 +62,8 @@ public class ConnexionJava implements Runnable {
 			System.out.println("CoJ\tJSON: "+j);
 		}
 	}
+	public void envoyerMessage(String m){
+		out.println(m);
+	}
 
 }

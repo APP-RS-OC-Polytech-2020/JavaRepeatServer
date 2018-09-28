@@ -38,8 +38,8 @@ public class configIO {
 		 * @return int	the port for java comms
 		 */
 		public static int getJavaPort(){
-		    //String port = getProps().getProperty("javaPort");
-			return 50007;//Integer.parseInt(port);
+		    String port = getProps().getProperty("javaPort");
+			return Integer.parseInt(port);
 		}
 		
 		/**

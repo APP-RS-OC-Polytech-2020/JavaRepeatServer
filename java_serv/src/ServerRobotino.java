@@ -119,4 +119,9 @@ public class ServerRobotino {
 	public synchronized void removeConnexionWeb(ConnexionWeb connexion) {
 		this.connexionsWeb.remove(connexion);
 	}
+	public synchronized void sendToAllRobotino(String m) {
+		for (int i = 0; i < connexionsRobotino.size(); i++) {
+			connexionsRobotino.get(i).envoyerMessage(m);
+		}
+	}
 }

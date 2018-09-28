@@ -13,7 +13,7 @@ import java.util.Properties;
  *
  */
 public class configIO {
-	private static File configFile = new File("config.properties");
+	private static File configFile = new File("java_serv/config.properties");
 	
 	public configIO(){}
 		 
@@ -39,6 +39,7 @@ public class configIO {
 		 */
 		public static int getJavaPort(){
 		    String port = getProps().getProperty("javaPort");
+			//int port = 50007;
 			return Integer.parseInt(port);
 		}
 		

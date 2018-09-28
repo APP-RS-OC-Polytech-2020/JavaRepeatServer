@@ -1,9 +1,9 @@
-import java.io.BufferedReader;
+/*import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit;*/
 
 public class mainRobotinoTest {
 
@@ -11,10 +11,13 @@ public class mainRobotinoTest {
 		// TODO Auto-generated constructor stub
 	}
 	public static void main(String[] args) {
-		PrintWriter out;
+		int port=50007;
+		String ipServer="193.48.125.70";
+		SocketRobotino socketRobotino = new SocketRobotino(ipServer, port);
+		new Thread(socketRobotino).start();
+		/*PrintWriter out;
 		BufferedReader in;
 		Socket clientSocket;
-		int port=50007;
 		String ipServer="192.168.56.1";//iplocal
 		//ipServer="193.48.125.70";
 		//ipServer="193.48.125.219";
@@ -41,6 +44,6 @@ public class mainRobotinoTest {
 			e.printStackTrace();
 		}
 		//System.out.println(""+this.nom+"\tgetOutputStream: "+clientSocket.getOutputStream());
-
+		 */
 	}
 }

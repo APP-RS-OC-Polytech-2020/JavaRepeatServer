@@ -29,7 +29,6 @@ public class ConnexionJava implements Runnable {
 		System.out.println("CoJ\tinfo: "+info);
 	}
 
-	@Override
 	public void run() {
 		serverRobotino.addConnexionJava(this);
 		try {

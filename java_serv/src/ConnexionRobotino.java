@@ -30,7 +30,6 @@ public class ConnexionRobotino implements Runnable {
 		System.out.println("CoRobo\tinfo: "+info);
 	}
 
-	@Override
 	public void run() {
 		serverRobotino.addConnexionRobotino(this);
 		try {

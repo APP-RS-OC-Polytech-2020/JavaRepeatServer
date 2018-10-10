@@ -14,10 +14,11 @@ import java.util.Properties;
  */
 public class configIO {
 	private static File configFile = new File("java_serv/config.properties");
+	private static configIO Instance = null;
 	
-	public configIO(){}
+	private configIO(){}
 		 
-		private static Properties getProps(){
+		private Properties getProps(){
 			try {
 			    FileReader reader = new FileReader(configFile);
 			    Properties props = new Properties();
@@ -38,7 +39,7 @@ public class configIO {
 		 * @return int	the port for java comms
 		 */
 		public static int getJavaPort(){
-		    String port = getProps().getProperty("javaPort");
+		    String port = configIO.getInstance().getProps().getProperty("javaPort");
 			return Integer.parseInt(port);
 		}
 		
@@ -47,8 +48,18 @@ public class configIO {
 		 * @return	int	port for Websocket
 		 */
 		public static int getWebsocketPort(){
-			String port = getProps().getProperty("websocketPort");
+			String port = configIO.getInstance().getProps().getProperty("websocketPort");
 			return Integer.parseInt(port);
+		}
+		
+		public static configIO getInstance(){
+			if(Instance!=null){
+				return Instance;
+			}
+			else{
+				Instance = new configIO();
+				return Instance;
+			}
 		}
 	
 

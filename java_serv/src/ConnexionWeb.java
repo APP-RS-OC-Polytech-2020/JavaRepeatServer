@@ -34,7 +34,6 @@ public class ConnexionWeb implements Runnable {
 
 	}
 
-	@Override
 	public void run() {
 		try {
 			String inLine =" ";

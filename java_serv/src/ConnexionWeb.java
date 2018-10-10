@@ -14,7 +14,12 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.json.JSONObject;
 
-
+/**
+ * Classe gérant les connexion avec les WebSockets
+ * Traitement fait "a la main" et avec l'aide de stackOVerflow
+ * Manque desz choses et des checks
+ *
+ */
 public class ConnexionWeb implements Runnable {
 	private ServerRobotino serverRobotino;
 	private Socket socketClient;

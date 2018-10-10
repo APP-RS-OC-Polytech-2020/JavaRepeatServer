@@ -6,7 +6,11 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
-
+/**
+ * Classe gérant la connexion en java. 
+ * 
+ *
+ */
 
 public class ConnexionJava implements Runnable {
 	private ServerRobotino serverRobotino;
@@ -42,6 +46,13 @@ public class ConnexionJava implements Runnable {
 		System.out.println("CoJ\ttest fin de conection par rupture de connexion: ");
 		serverRobotino.removeConnexionJava(this);
 	}
+	
+	/**
+	 * Fonction permettant le decodage du JSON et le traitement selon les params du projet
+	 * appelle la lib JSON pour faire sa magie
+	 * TODO faire autre chose que renvoyer les messages
+	 * @param j
+	 */
 	public void decodeurJson(String j) {
 		try{
 			JSONObject JSON = new JSONObject(j);

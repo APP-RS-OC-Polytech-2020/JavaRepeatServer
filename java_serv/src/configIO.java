@@ -7,7 +7,8 @@ import java.util.Properties;
 /**
  * Reads and Writes to config.properties, placed at project root.
  * Has a number of handy methods to get quickly stuff.
- * Grab with: configIO.getJavaPort
+ * Grab with: configIO.getInstance.getJavaPort
+ * Uses Singleton Pattern.
  * (Or whatever propertie you need)
  * @author prospere
  *

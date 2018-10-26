@@ -11,12 +11,12 @@ public class mainRobotinoTest {
 		// TODO Auto-generated constructor stub
 	}
 	public static void main(String[] args) {
+		int port=50008;
+		String ipServer="192.168.56.1";//iplocal
+		ipServer="193.48.125.70";
 		PrintWriter out;
 		BufferedReader in;
 		Socket clientSocket;
-		int port=50007;
-		String ipServer="192.168.56.1";//iplocal
-		//ipServer="193.48.125.70";
 		//ipServer="193.48.125.219";
 		//new Thread(new Client(ipServer,port,"C1")).start();
 		//Min + (Math.random() * (Max - Min))

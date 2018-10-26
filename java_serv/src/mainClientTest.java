@@ -14,7 +14,7 @@ public class mainClientTest {
 		PrintWriter out;
 		BufferedReader in;
 		Socket clientSocket;
-		int port=50007;
+		int port=50008;
 		String ipServer="192.168.56.1";//iplocal
 		//ipServer="193.48.125.70";
 		//ipServer="193.48.125.219";

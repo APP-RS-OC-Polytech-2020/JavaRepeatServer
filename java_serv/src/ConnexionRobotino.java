@@ -13,6 +13,8 @@ public class ConnexionRobotino implements Runnable {
 	private Socket socketClient;
 	private PrintWriter out;
 	private BufferedReader in;
+	public String ipRobot;
+	public String linkVideo;
 	public ConnexionRobotino(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in) {
 		try {
 			this.out = new PrintWriter(socketClient.getOutputStream(), true);
@@ -23,6 +25,8 @@ public class ConnexionRobotino implements Runnable {
 		}
 		this.serverRobotino=serverRobotino;
 		this.socketClient=socketClient;
+		ipRobot=socketClient.getInetAddress().toString();
+		System.out.println("ipRobot:"+ipRobot);
 		System.out.println("CoRobo\tgetIntputStreamServer: "+firstLine);
 		JSONObject JSON = new JSONObject(firstLine);
 		String info = JSON.getString("infoInit");
@@ -56,6 +60,9 @@ public class ConnexionRobotino implements Runnable {
 			}else if(type.equals("message")){//message
 				String message = JSON.getString("message");
 				System.out.println("CoRobo\tMessage: "+message);
+			}else if(type.equals("video")){//message
+				linkVideo= JSON.getString("link");
+				serverRobotino.sendToAllWeb(j);
 			}
 		}catch(org.json.JSONException e){
 			System.out.println("CoRobo\terreur decodage JSON: "+e);

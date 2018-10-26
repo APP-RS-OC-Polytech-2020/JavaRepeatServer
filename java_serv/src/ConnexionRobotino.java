@@ -18,7 +18,6 @@ public class ConnexionRobotino implements Runnable {
 			this.out = new PrintWriter(socketClient.getOutputStream(), true);
 			this.in = in;
 			out.println("{\"type\":\"init\",\"infoInit\":\"Connection accepté\"}");
-			out.println("{\"type\":\"init\",\"infoInit\":\"Connection accepté\"}");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -30,6 +29,7 @@ public class ConnexionRobotino implements Runnable {
 		System.out.println("CoRobo\tinfo: "+info);
 	}
 
+	@Override
 	public void run() {
 		serverRobotino.addConnexionRobotino(this);
 		try {
@@ -42,9 +42,6 @@ public class ConnexionRobotino implements Runnable {
 		} catch (IOException e) {/*e.printStackTrace();*/}//connexion fermé
 		System.out.println("CoRobo\ttest fin de conection par rupture de connexion: ");
 		serverRobotino.removeConnexionRobotino(this);
-	}
-	public void sendMessage(String m) {
-		out.println(m);
 	}
 	public void decodeurJson(String j) {
 		try{

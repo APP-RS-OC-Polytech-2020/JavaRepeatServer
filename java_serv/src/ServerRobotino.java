@@ -82,6 +82,7 @@ public class ServerRobotino {
 					}
 					else{
 						PrintWriter out = new PrintWriter(socketClient.getOutputStream(), true);
+						System.out.println("SR\tErreur message d'entr�e: "+firstLine);
 						out.println("L( ¨° 3¨° )J----#:`* no socket for u");
 						socketClient.close();
 					}
@@ -123,5 +124,19 @@ public class ServerRobotino {
 		for (int i = 0; i < connexionsRobotino.size(); i++) {
 			connexionsRobotino.get(i).envoyerMessage(m);
 		}
+	}
+	public synchronized void sendToAllWeb(String m) {
+		for (int i = 0; i < connexionsWeb.size(); i++) {
+			connexionsWeb.get(i).envoyerMessage(m);
+		}
+	}
+	public synchronized String getLinkVideoRobot(String ipRobot) {
+		for (int i = 0; i < connexionsRobotino.size(); i++) {
+			//if(connexionsRobotino.get(i).ipRobot.equals(ipRobot)){
+			if("test".equals(ipRobot)){
+				return connexionsRobotino.get(i).linkVideo;
+			}
+		}
+		return "http://tp-epu.univ-savoie.fr/~prospere/img.png";
 	}
 }

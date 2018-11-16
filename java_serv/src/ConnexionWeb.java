@@ -14,17 +14,13 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.json.JSONObject;
 
-/**
- * Classe gérant les connexion avec les WebSockets
- * Traitement fait "a la main" et avec l'aide de stackOVerflow
- * Manque desz choses et des checks
- *
- */
+
 public class ConnexionWeb implements Runnable {
 	private ServerRobotino serverRobotino;
 	private Socket socketClient;
 	private PrintWriter out;
 	private BufferedReader in;
+	public String ipWeb;
 	public ConnexionWeb(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in) {
 		try {
 			this.out = new PrintWriter(socketClient.getOutputStream(), true);
@@ -39,9 +35,12 @@ public class ConnexionWeb implements Runnable {
 
 	}
 
+	@Override
 	public void run() {
 		try {
 			String inLine =" ";
+			ipWeb=socketClient.getInetAddress().toString();
+			System.out.println("ipWeb:"+ipWeb);
 			while(this.serverRobotino.isServerRunning()&&(!inLine.startsWith("Sec-WebSocket-Key: "))){//On attend la ligne qui porte la clée
 				inLine = in.readLine();//récupération des informations au déput de la connexion connexion
 				System.out.println("message inconu: "+inLine);
@@ -95,7 +94,12 @@ public class ConnexionWeb implements Runnable {
 			JSONObject JSON = new JSONObject(message);
 			String info = JSON.getString("infoInit");
 			System.out.println("CoW\tinfo: "+info);
-			this.encodeWebSocketMessage("{\"type\":\"init\",\"infoInit\":\"Connection accepté\"}");
+			try{
+				this.encodeWebSocketMessage("{\"type\":\"init\",\"infoInit\":\"Connection accepté\",\"link\":\""+serverRobotino.getLinkVideoRobot(JSON.getString("ipRobot"))+"\"}");
+			}catch(org.json.JSONException e){
+				this.encodeWebSocketMessage("{\"type\":\"init\",\"infoInit\":\"Connection accepté\",\"link\":\""+serverRobotino.getLinkVideoRobot("test")+"\"}");
+			}
+			this.encodeWebSocketMessage("{\"type\":\"init\",\"infoInit\":\"Connection accepté\",\"link\":\""+serverRobotino.getLinkVideoRobot("test")+"\"}");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -208,7 +212,7 @@ public class ConnexionWeb implements Runnable {
 
         // Fin + RSV + OpCode byte
         byte b = (byte) buf.read();
-		System.out.println("byte inconu: "+b);
+		//System.out.println("byte inconu: "+b);
         boolean fin = ((b & 0x80) != 0);
         boolean rsv1 = ((b & 0x40) != 0);
         boolean rsv2 = ((b & 0x20) != 0);
@@ -220,7 +224,7 @@ public class ConnexionWeb implements Runnable {
 
         // Masked + Payload Length
         b = (byte) buf.read();
-        System.out.println("byte buffer: "+b);
+        //System.out.println("byte buffer: "+b);
         boolean masked = ((b & 0x80) != 0);
         int payloadLength = (0x7F & b);
         int byteCount = 0;
@@ -238,8 +242,8 @@ public class ConnexionWeb implements Runnable {
         // Decode Payload Length
         while (byteCount-- > 0){
         	b = (byte) buf.read();
-            System.out.println("payloadLength1: "+payloadLength+", "+((b & 0xFF) << (8 * byteCount))+", "+(b & 0xFF)+", "+(8 * byteCount));
-        	 payloadLength += (b & 0xFF) << (8 * byteCount);
+            //System.out.println("payloadLength1: "+payloadLength+", "+((b & 0xFF) << (8 * byteCount))+", "+(b & 0xFF)+", "+(8 * byteCount));
+        	payloadLength += (b & 0xFF) << (8 * byteCount);
         }
 
         // TODO: add control frame payload length validation here

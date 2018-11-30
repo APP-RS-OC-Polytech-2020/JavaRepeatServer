@@ -4,7 +4,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * Créer un clien Java qui va se connecter aux server, principalement dans le but de le tester
+ * @author lalandef
+ *
+ */
 public class mainClientTest {
 
 	public mainClientTest() {

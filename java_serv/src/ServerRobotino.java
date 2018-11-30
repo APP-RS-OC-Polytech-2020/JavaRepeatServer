@@ -41,6 +41,9 @@ public class ServerRobotino {
 		}
 		this.waitNewConnexion();
 	}
+	/**
+	 * Attend les connexions puis les analyse pour savoir si c'est une connexion web, robotino où autre
+	 */
 	private void waitNewConnexion() {
 		try {
 			System.out.println("Server lancé");
@@ -60,6 +63,8 @@ public class ServerRobotino {
 									new Thread(new ConnexionJava(this,socketClient,firstLine,in)).start();
 								}else if(clientType.equals("Robotino")){//connexion d'un Robotino
 									new Thread(new ConnexionRobotino(this,socketClient,firstLine,in)).start();
+								}else if(clientType.equals("Webcam")){//connexion d'un Robotino
+									new Thread(new ConnexionWebcam(this,socketClient,firstLine,in)).start();
 								}else{//type de client non reconu
 									PrintWriter out = new PrintWriter(socketClient.getOutputStream(), true);
 									out.println("L( Â¨Â° 3Â¨Â° )J----#:`* no socket for u");
@@ -120,16 +125,52 @@ public class ServerRobotino {
 	public synchronized void removeConnexionWeb(ConnexionWeb connexion) {
 		this.connexionsWeb.remove(connexion);
 	}
+	
+	/**
+	 * Envoie un message à tout les robotino
+	 * @param m message JSON
+	 */
 	public synchronized void sendToAllRobotino(String m) {
 		for (int i = 0; i < connexionsRobotino.size(); i++) {
 			connexionsRobotino.get(i).envoyerMessage(m);
 		}
 	}
+	
+	/**
+	 * Envoie un message à un robotino
+	 * @param m message JSON
+	 * @param ip ip du robotino
+	 */
+	public synchronized void sendToOneRobotino(String m, String ip) {
+		boolean found=false;
+		for (int i = 0; i < connexionsRobotino.size(); i++) {
+			if(connexionsRobotino.get(i).ipRobot.equals(ip)){
+				connexionsRobotino.get(i).envoyerMessage(m);
+				System.out.println("Envoyé à "+ip);
+				found=true;
+			}
+		}
+		if(!found){
+			System.out.println("Aucun robot trouvé");
+		}
+	}
+	
+	/**
+	 * Envoie un message à toute les connexions web
+	 * @param m message JSON
+	 */
 	public synchronized void sendToAllWeb(String m) {
 		for (int i = 0; i < connexionsWeb.size(); i++) {
 			connexionsWeb.get(i).envoyerMessage(m);
 		}
 	}
+	
+	/**
+	 * Renvoie le lien de la caméra du robot
+	 * @param ipRobot
+	 * @return
+	 */
+	//Imcomplête
 	public synchronized String getLinkVideoRobot(String ipRobot) {
 		for (int i = 0; i < connexionsRobotino.size(); i++) {
 			//if(connexionsRobotino.get(i).ipRobot.equals(ipRobot)){
@@ -137,6 +178,7 @@ public class ServerRobotino {
 				return connexionsRobotino.get(i).linkVideo;
 			}
 		}
-		return "http://tp-epu.univ-savoie.fr/~prospere/img.png";
+		//return "http://tp-epu.univ-savoie.fr/~prospere/img.png";
+		return "193.48.125.71:1337";
 	}
 }

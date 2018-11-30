@@ -5,6 +5,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Créer un faux client Robotino qui va se connecter aux server, principalement dans le but de le tester
+ * @author lalandef
+ *
+ */
 public class mainRobotinoTest {
 
 	public mainRobotinoTest() {

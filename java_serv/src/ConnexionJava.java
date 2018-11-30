@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 /**
- * Classe gérant la connexion en java. 
+ * Classe gérant la connexion en java. (Surtout utilisé pour des tests)
  * 
  *
  */
@@ -32,7 +32,10 @@ public class ConnexionJava implements Runnable {
 		String info = JSON.getString("infoInit");
 		System.out.println("CoJ\tinfo: "+info);
 	}
-
+	
+	/**
+	 * Initie la connexion et attend les requête de l'application Java
+	 */
 	public void run() {
 		serverRobotino.addConnexionJava(this);
 		try {
@@ -72,6 +75,11 @@ public class ConnexionJava implements Runnable {
 			System.out.println("CoJ\tJSON: "+j);
 		}
 	}
+	
+	/**
+	 * Envoie un message JSON aux autre utilisateur(Un ou plusieur selon ce qui est précisé dans le message)
+	 * @param m message JSON à envoyer
+	 */
 	public void envoyerMessage(String m){
 		out.println(m);
 	}

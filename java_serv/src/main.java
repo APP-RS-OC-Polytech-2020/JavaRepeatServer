@@ -1,4 +1,8 @@
-
+/**
+ * Execute le server
+ * @author lalandef
+ *
+ */
 public class main {
 
 	public static void main(String[] args) {

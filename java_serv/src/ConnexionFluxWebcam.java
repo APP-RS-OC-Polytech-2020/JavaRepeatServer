@@ -17,10 +17,11 @@ public class ConnexionFluxWebcam implements Runnable {
 	public ConnexionFluxWebcam(ServerRobotino serverRobotino, String ip, String port){
 		try {
 			this.serverRobotino=serverRobotino;
-			this.ip = ip;
+			this.ip = ip;//"193.48.125.71";//ip;
 			this.port = Integer.parseInt(port);
 			System.out.println("CoFlWebcam\tdebut");
-			//try{TimeUnit.MILLISECONDS.sleep(1000);}catch (InterruptedException e1) {}
+			try{TimeUnit.MILLISECONDS.sleep(500);}catch (InterruptedException e1) {}
+			System.out.println("ip:"+this.ip+" port:"+this.port);
 			clientSocket = new Socket(this.ip, this.port);
 			out = new PrintWriter(clientSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -34,18 +35,29 @@ public class ConnexionFluxWebcam implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.run();
 		
 	}
 	public void run() {
+		serverRobotino.addConnexionFluxWebcam(this);
 		String inLine = "";
+		byte[] inLineByte;
 		System.out.println("CoFlWebcam\tdebut");
 		try {
 			while(this.serverRobotino.isServerRunning()&&inLine!=null){//lecture des nouveau message
+				//clientSocket.getInputStream().read();
 				inLine = in.readLine();
+				inLineByte = inLine.getBytes("UTF-8");
 				System.out.println("CoFlWebcam\tgetIntputStreamServer2: "+inLine);
+				//try{TimeUnit.MILLISECONDS.sleep(1000);}catch (InterruptedException e1) {}
+				for (int i = 0; i < serverRobotino.connexionsSendFluxWebcam.size(); i++) {
+					System.out.println("CoFlWebcam\tgetIntputStreamServerfor: "+inLine);
+					serverRobotino.connexionsSendFluxWebcam.get(i).socketClient.getOutputStream().write(inLineByte, 0, inLineByte.length);
+				}
 				//this.decodeurJson(inLine);
 			}
 		} catch (IOException e) {
+			serverRobotino.removeConnexionFluxWebcam(this);
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -21,8 +21,8 @@ import org.json.JSONObject;
  */
 public class ConnexionWeb implements Runnable {
 	private ServerRobotino serverRobotino;
-	private Socket socketClient;
-	private PrintWriter out;
+	public Socket socketClient;
+	public PrintWriter out;
 	private BufferedReader in;
 	public String ipWeb;
 	public ConnexionWeb(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in) {
@@ -48,6 +48,14 @@ public class ConnexionWeb implements Runnable {
 			String inLine =" ";
 			ipWeb=socketClient.getInetAddress().toString();
 			System.out.println("ipWeb:"+ipWeb);
+/*
+			
+			
+			serverRobotino.addConnexionWeb(this);
+			try{TimeUnit.MILLISECONDS.sleep(150000);}catch (InterruptedException e1) {}
+			
+			
+*/			
 			while(this.serverRobotino.isServerRunning()&&(!inLine.startsWith("Sec-WebSocket-Key: "))){//On attend la ligne qui porte la clée
 				inLine = in.readLine();//récupération des informations au déput de la connexion connexion
 				System.out.println("message inconu: "+inLine);
@@ -222,7 +230,8 @@ public class ConnexionWeb implements Runnable {
 			System.out.println("test bytes Messages: "+bytesMessage[3]);*/
 			System.out.println("test bytes: "+bytes);
 			try {
-				socketClient.getOutputStream().write(bytesRequete);
+				socketClient.getOutputStream().write(bytesRequete, 0, bytesRequete.length);
+				//socketClient.getOutputStream().write(bytesRequete, 0, bytesRequete.length);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -3,8 +3,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Créer un faux client Robotino qui va se connecter aux server, principalement dans le but de le tester
+ * @author lalandef
+ *
+ */
 public class mainRobotinoTest {
 
 	public mainRobotinoTest() {
@@ -13,8 +19,16 @@ public class mainRobotinoTest {
 	public static void main(String[] args) {
 		int port=50008;
 		String ipServer="193.48.125.70";
-		SocketRobotino socketRobotino = new SocketRobotino(ipServer, port);
-		new Thread(socketRobotino).start();
+		try {
+			Socket socketRobotino = new Socket(ipServer, port);
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//new Thread(socketRobotino).start();
 		PrintWriter out;
 		BufferedReader in;
 		Socket clientSocket;

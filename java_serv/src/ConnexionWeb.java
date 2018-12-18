@@ -14,11 +14,15 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.json.JSONObject;
 
-
+/**
+ * Gère la connexion d'une page web au server
+ * @author lalandef
+ *
+ */
 public class ConnexionWeb implements Runnable {
 	private ServerRobotino serverRobotino;
-	private Socket socketClient;
-	private PrintWriter out;
+	public Socket socketClient;
+	public PrintWriter out;
 	private BufferedReader in;
 	public String ipWeb;
 	public ConnexionWeb(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in) {
@@ -34,13 +38,24 @@ public class ConnexionWeb implements Runnable {
 		}
 
 	}
-
+	
+	/**
+	 * Initie la connexion et attend les requête de la page web
+	 */
 	@Override
 	public void run() {
 		try {
 			String inLine =" ";
 			ipWeb=socketClient.getInetAddress().toString();
 			System.out.println("ipWeb:"+ipWeb);
+/*
+			
+			
+			serverRobotino.addConnexionWeb(this);
+			try{TimeUnit.MILLISECONDS.sleep(150000);}catch (InterruptedException e1) {}
+			
+			
+*/			
 			while(this.serverRobotino.isServerRunning()&&(!inLine.startsWith("Sec-WebSocket-Key: "))){//On attend la ligne qui porte la clée
 				inLine = in.readLine();//récupération des informations au déput de la connexion connexion
 				System.out.println("message inconu: "+inLine);
@@ -73,6 +88,25 @@ public class ConnexionWeb implements Runnable {
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			}
+			/*
+			 try {//ancienne mais fonctionelle version
+				response = ("HTTP/1.1 101 Switching Protocols\r\n"
+				        + "Connection: Upgrade\r\n"
+				        + "Upgrade: websocket\r\n"
+				        + "Sec-WebSocket-Accept: "
+				        + DatatypeConverter
+				        .printBase64Binary(
+				                MessageDigest
+				                .getInstance("SHA-1")
+				                .digest((key + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11")
+				                        .getBytes("UTF-8")))
+				        + "\r\n\r\n").getBytes("UTF-8");
+			    //System.out.println("reponse: "+response.toString());
+			    socketClient.getOutputStream().write(response, 0, response.length);
+			} catch (NoSuchAlgorithmException e) {
+				e.printStackTrace();
+			}
+			 */
 		            //.getBytes("UTF-8");
 			inLine = in.readLine();//récupération des informations au début de la connexion connexion
 			System.out.println("message inconu: "+inLine);
@@ -115,7 +149,10 @@ public class ConnexionWeb implements Runnable {
 		System.out.println("CoW\ttest fin de conection par rupture de connexion: ");
 		serverRobotino.removeConnexionWeb(this);
 	}
-
+	/**
+	 * Encode un texte et l'envoie selon le protocole http
+	 * @param message
+	 */
 	public void encodeWebSocketMessage(String message){
 		try {
 			//byte en byte [-128..127]  byte en int [0..255]
@@ -193,7 +230,8 @@ public class ConnexionWeb implements Runnable {
 			System.out.println("test bytes Messages: "+bytesMessage[3]);*/
 			System.out.println("test bytes: "+bytes);
 			try {
-				socketClient.getOutputStream().write(bytesRequete);
+				socketClient.getOutputStream().write(bytesRequete, 0, bytesRequete.length);
+				//socketClient.getOutputStream().write(bytesRequete, 0, bytesRequete.length);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -205,6 +243,11 @@ public class ConnexionWeb implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Decode un message reçu selon les websockets
+	 * @return Un message au format String(En générale un JSON)
+	 * @throws IOException
+	 */
 	public String decodeWebSocketMessage() throws IOException{//code trouvé: https://stackoverflow.com/questions/18368130/how-to-parse-and-validate-a-websocket-frame-in-java
 		String message="";
 		InputStream buf = socketClient.getInputStream();
@@ -276,6 +319,11 @@ public class ConnexionWeb implements Runnable {
 		message=new String(payload, "UTF-8");
 		return message;
 	}
+	/**
+	 * Decode un message JSON pour pouvoir l'utiliser et le traite
+	 * pour les autres utilisateurs/le serveur.
+	 * @param j Message JSON aux format texte
+	 */
 	public void decodeurJson(String j) {
 		try{
 			JSONObject JSON = new JSONObject(j);
@@ -290,6 +338,9 @@ public class ConnexionWeb implements Runnable {
 				String message = JSON.getString("message");
 				System.out.println("CoW\tMessage: "+message);
 			}else if(type.equals("commande")){//message
+				System.out.println(JSON.getJSONObject("robot").getString("address"));
+				serverRobotino.sendToOneRobotino(j,JSON.getJSONObject("robot").getString("address"));
+			}else if(type.equals("commandeAll")){//message
 				serverRobotino.sendToAllRobotino(j);
 			}
 		}catch(org.json.JSONException e){
@@ -297,6 +348,10 @@ public class ConnexionWeb implements Runnable {
 			System.out.println("CoW\tJSON: "+j);
 		}
 	}
+	/**
+	 * Envoie un message JSON aux autre utilisateur(Un ou plusieur selon ce qui est précisé dans le message)
+	 * @param m message JSON à envoyer
+	 */
 	public void envoyerMessage(String m){
 		encodeWebSocketMessage(m);
 	}

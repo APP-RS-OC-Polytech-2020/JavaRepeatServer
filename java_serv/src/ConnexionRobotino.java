@@ -34,7 +34,7 @@ public class ConnexionRobotino implements Runnable {
 		JSONObject JSON = new JSONObject(firstLine);
 		String info = JSON.getString("infoInit");
 		try{
-			this.ipRobot = JSON.getString("ip");
+			this.ipRobot = JSON.getString("ipRobot");
 		}catch(org.json.JSONException e){
 			ipRobot=socketClient.getInetAddress().toString();
 			System.out.println("CoRobot\tPas d'ip envoyé: "+e);

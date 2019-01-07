@@ -133,6 +133,7 @@ public class ServerRobotino {
 	}
 	public synchronized void addConnexionRobotino(ConnexionRobotino connexion) {
 		this.connexionsRobotino.add(connexion);
+		System.out.println("CRsize"+connexionsRobotino.size());
 	}
 	public synchronized void removeConnexionRobotino(ConnexionRobotino connexion) {
 		this.connexionsRobotino.remove(connexion);
@@ -209,6 +210,7 @@ public class ServerRobotino {
 			}
 		}
 		//return "http://tp-epu.univ-savoie.fr/~prospere/img.png";
-		return "193.48.125.71:1337";
+		//return "193.48.125.71:1337";
+		return "193.48.125.70:50008";
 	}
 }

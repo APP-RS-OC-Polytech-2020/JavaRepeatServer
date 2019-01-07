@@ -21,6 +21,13 @@ public class ConnexionSendFluxWebcam  implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		out.println("HTTP/1.0 200 OK");
+		out.println("Connection: close");
+		out.println("Max-Age: 0");
+		out.println("Expires: 0");
+		out.println("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+		out.println("Content-Type: multipart/x-mixed-replace; boundary=stream");
+		out.println("");
 
 	}
 	public void run() {

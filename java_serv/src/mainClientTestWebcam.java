@@ -40,10 +40,68 @@ public class mainClientTestWebcam {
 			out.println("{\"type\":\"message\",\"message\":\"test5\"}");*/
 			//try {TimeUnit.MILLISECONDS.sleep(3000);} catch (InterruptedException e) {e.printStackTrace();}
 			String inLine="";
+
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
+			inLine = in.readLine();
+			System.out.println(""+inLine);
 			while(inLine!=null){//&&inLine!=null){//lecture des nouveau message
 				//try {TimeUnit.MILLISECONDS.sleep(500);} catch (InterruptedException e) {e.printStackTrace();}
 				inLine = in.readLine();
-				System.out.println("client\tgetIntputStreamServer: "+inLine);
+				//int inLine2 = in.read();
+				//System.out.println("client\tgetIntputStreamServer: "+inLine);
 			}
 			//clientSocket.close();
 		} catch (IOException e) {

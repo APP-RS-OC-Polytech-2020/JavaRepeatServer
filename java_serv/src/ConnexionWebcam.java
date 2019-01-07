@@ -1,30 +1,14 @@
 import java.io.BufferedReader;
-<<<<<<< HEAD
 import java.net.Socket;
+import java.io.IOException;
+import java.io.PrintWriter;
+import org.json.JSONObject;
 
 /**
  * Classe qui doit faire une connection a la webcam, et qui doit redistribuer a tout les clients.
  * @author prospere
  *
  */
-public class ConnexionWebcam implements Runnable {
-
-	public ConnexionWebcam(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in){
-		
-	}
-	
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-=======
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
-
-import org.json.JSONObject;
-
 public class ConnexionWebcam implements Runnable {
 	private ServerRobotino serverRobotino;
 	private Socket socketClient;

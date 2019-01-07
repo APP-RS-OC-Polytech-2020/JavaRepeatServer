@@ -34,7 +34,6 @@ public class ConnexionRobotino implements Runnable {
 		System.out.println("CoRobo\tgetIntputStreamServer: "+firstLine);
 		JSONObject JSON = new JSONObject(firstLine);
 		String info = JSON.getString("infoInit");
-<<<<<<< HEAD
 		try{
 			this.ipRobot = JSON.getString("ipRobot");
 		}catch(org.json.JSONException e){
@@ -44,9 +43,6 @@ public class ConnexionRobotino implements Runnable {
 		}
 		System.out.println("ipRobot:"+ipRobot);
 		System.out.println("CoRobot\tinfo: "+info);
-=======
-		System.out.println("CoRobo\tinfo: "+info);
->>>>>>> branch 'java_serv' of https://github.com/APP-RS-OC-Polytech-2020/Custodia
 	}
 
 	/**

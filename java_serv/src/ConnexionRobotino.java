@@ -29,10 +29,12 @@ public class ConnexionRobotino implements Runnable {
 		}
 		this.serverRobotino=serverRobotino;
 		this.socketClient=socketClient;
-		
-		System.out.println("CoRobot\tgetIntputStreamServer: "+firstLine);
+		ipRobot=socketClient.getInetAddress().toString();
+		System.out.println("ipRobot:"+ipRobot);
+		System.out.println("CoRobo\tgetIntputStreamServer: "+firstLine);
 		JSONObject JSON = new JSONObject(firstLine);
 		String info = JSON.getString("infoInit");
+<<<<<<< HEAD
 		try{
 			this.ipRobot = JSON.getString("ipRobot");
 		}catch(org.json.JSONException e){
@@ -42,6 +44,9 @@ public class ConnexionRobotino implements Runnable {
 		}
 		System.out.println("ipRobot:"+ipRobot);
 		System.out.println("CoRobot\tinfo: "+info);
+=======
+		System.out.println("CoRobo\tinfo: "+info);
+>>>>>>> branch 'java_serv' of https://github.com/APP-RS-OC-Polytech-2020/Custodia
 	}
 
 	/**
@@ -71,11 +76,11 @@ public class ConnexionRobotino implements Runnable {
 		try{
 			JSONObject JSON = new JSONObject(j);
 			String type = JSON.getString("type");
-			System.out.println("CoRobot\ttype:"+type);
+			System.out.println("CoRobo\ttype:"+type);
 			
 			if(type.equals("init")){//inutilisé ici, uniquement au début de la classe connexion
 				String info = JSON.getString("infoStart");
-				System.out.println("CoRobot\tinfo: "+info);
+				System.out.println("CoRobo\tinfo: "+info);
 				
 			}else if(type.equals("message")){//message
 				String message = JSON.getString("message");

@@ -44,6 +44,7 @@ public class ConnexionWeb implements Runnable {
 	 */
 	@Override
 	public void run() {
+		envoyerMessage("\"type\":\"sensors\"");
 		try {
 			String inLine =" ";
 			ipWeb=socketClient.getInetAddress().toString();
@@ -341,6 +342,16 @@ public class ConnexionWeb implements Runnable {
 				System.out.println(JSON.getJSONObject("robot").getString("address"));
 				serverRobotino.sendToOneRobotino(j,JSON.getJSONObject("robot").getString("address"));
 			}else if(type.equals("commandeAll")){//message
+				serverRobotino.sendToAllRobotino(j);
+			}else if(type.equals("nameToPort")){//message
+				//{"type":"nameToPort","name":"name1" }
+				String name = JSON.getString("name");
+				if(serverRobotino.mapNameWebcam_Port.get(name)!=null){
+					envoyerMessage("{\"type\":\"nameToPort\", \"name\":\""+name+"\", \"port\":\""+serverRobotino.mapNameWebcam_Port.get(name)+"\"}");
+				}else{
+					envoyerMessage("{\"type\":\"nameToPort\", \"name\":\""+name+"\", \"port\":\"null\"}");
+				}
+				//{"type":"nameToPort","name":"name1", "port":"50009"}
 				serverRobotino.sendToAllRobotino(j);
 			}
 		}catch(org.json.JSONException e){

@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.net.Socket;
 import java.io.IOException;
 import java.io.PrintWriter;
+
 import org.json.JSONObject;
 
 /**
@@ -16,6 +17,7 @@ public class ConnexionWebcam implements Runnable {
 	private BufferedReader in;
 	public String ipWebcam;
 	public String portWebcam;
+	public String name;
 	public ConnexionWebcam(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in) {
 		try {
 			this.out = new PrintWriter(socketClient.getOutputStream(), true);
@@ -40,6 +42,13 @@ public class ConnexionWebcam implements Runnable {
 			System.out.println("CoWebcam\tPas de port envoyé: "+e);
 			System.out.println("CoWebcam\tJSON: "+firstLine);
 		}
+		try{
+			this.name = JSON.getString("clientName");
+		}catch(org.json.JSONException e){
+			name="";
+			System.out.println("CoWebcam\tPas de \"clientName\" envoyé: "+e);
+			System.out.println("CoWebcam\tJSON: "+firstLine);
+		}
 		this.serverRobotino=serverRobotino;
 		this.socketClient=socketClient;
 		//System.out.println("CoWebcam\tgetIntputStreamServer: "+firstLine);
@@ -50,7 +59,45 @@ public class ConnexionWebcam implements Runnable {
 	 * Initie la connexion et attend les requête de la webcam
 	 */
 	public void run() {
-		new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam);
+		//String portString=serverRobotino.mapNameWebcam_Port.get(name).toString();
+		int port;
+		WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam;
+		if(serverRobotino.mapNameWebcam_Port.get(name)==null){
+			port = serverRobotino.portDispo;
+			serverRobotino.portDispo++;
+			serverRobotino.mapNameWebcam_Port.put(name,port);
+			new Thread(new WaitNewConnexionSendFluxWebcam(port,serverRobotino,name, ipWebcam, portWebcam)).start();
+			//new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam, name, waitNewConnexionSendFluxWebcam);
+		}else{
+			port = serverRobotino.mapNameWebcam_Port.get(name);
+			waitNewConnexionSendFluxWebcam = serverRobotino.getWaitNewConnexionSendFluxWebcam(name);
+			//System.out.println("waitNewConnexionSendFluxWebcam"+waitNewConnexionSendFluxWebcam);
+			//new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam, name, waitNewConnexionSendFluxWebcam);
+			new Thread(new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam, name, waitNewConnexionSendFluxWebcam)).start();
+			//new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam, name, waitNewConnexionSendFluxWebcam);
+		}
+		/*//String portString=serverRobotino.mapNameWebcam_Port.get(name).toString();
+		int port;
+		WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam;
+		if(serverRobotino.mapNameWebcam_Port.get(name)==null){
+			port = serverRobotino.portDispo;
+			serverRobotino.portDispo++;
+			serverRobotino.mapNameWebcam_Port.put(name,port);
+			Thread threadWaitNewConnexionSendFluxWebcam = new Thread(waitNewConnexionSendFluxWebcam = new WaitNewConnexionSendFluxWebcam(port,serverRobotino,name));
+			threadWaitNewConnexionSendFluxWebcam.start();
+			new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam, name, waitNewConnexionSendFluxWebcam);
+		}else{
+			port = serverRobotino.mapNameWebcam_Port.get(name);
+			waitNewConnexionSendFluxWebcam = serverRobotino.getWaitNewConnexionSendFluxWebcam(name);
+			new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam, name, waitNewConnexionSendFluxWebcam);
+		}*/
+		/*int portDispo = serverRobotino.portDispo;
+		serverRobotino.portDispo++;*/
+		//ConnexionFluxWebcam connexionFluxWebcamne;
+		//WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam;
+		//Thread threadConnexionFluxWebcam = new Thread(connexionFluxWebcamne = new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam, name));
+		//Thread threadWaitNewConnexionSendFluxWebcam = new Thread(waitNewConnexionSendFluxWebcam = new WaitNewConnexionSendFluxWebcam(port,serverRobotino,name));
+		//threadWaitNewConnexionSendFluxWebcam.start();
 		//serverRobotino.addConnexionWebcam(this);
 		/*try {
 			String inLine = "";

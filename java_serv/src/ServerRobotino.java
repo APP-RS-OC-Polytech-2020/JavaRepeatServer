@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import org.json.JSONObject;
@@ -25,8 +27,11 @@ public class ServerRobotino {
 	private ArrayList<ConnexionRobotino> connexionsRobotino = new ArrayList<ConnexionRobotino>();
 	public ArrayList<ConnexionWeb> connexionsWeb = new ArrayList<ConnexionWeb>();
 	public ArrayList<ConnexionFluxWebcam> connexionsFluxWebcam = new ArrayList<ConnexionFluxWebcam>();
-	public ArrayList<ConnexionSendFluxWebcam> connexionsSendFluxWebcam = new ArrayList<ConnexionSendFluxWebcam>();
+	public ArrayList<WaitNewConnexionSendFluxWebcam> waitNewConnexionSendFluxWebcams = new ArrayList<WaitNewConnexionSendFluxWebcam>();
+	//public ArrayList<ConnexionSendFluxWebcam> connexionsSendFluxWebcam = new ArrayList<ConnexionSendFluxWebcam>();
 	//private ArrayList<Connexion> connexionsRobotino = new ArrayList<Connexion>();
+	public int portDispo = 50010;
+	HashMap<String,Integer> mapNameWebcam_Port = new HashMap<String, Integer>();
 
 	//private Thread t1;
 	private boolean serverRunning = true;
@@ -52,7 +57,7 @@ public class ServerRobotino {
 			while(serverRunning){
 				Socket socketClient = socketServer.accept();//Quelque chose essai de se connecter
 				//System.out.println("CoSR\ttest: ");
-				BufferedReader in = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));;
+				BufferedReader in = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
 				String firstLine = in.readLine();
 				System.out.println("CoSR\tfirstLine: "+firstLine);
 				if(serverRunning){
@@ -150,12 +155,34 @@ public class ServerRobotino {
 	public synchronized void removeConnexionFluxWebcam(ConnexionFluxWebcam connexionsFluxWebcam) {
 		this.connexionsFluxWebcam.remove(connexionsFluxWebcam);
 	}
-	public synchronized void addConnexionSendFluxWebcam(ConnexionSendFluxWebcam connexionsSendFluxWebcam) {
+	public synchronized void addWaitNewConnexionSendFluxWebcam(WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam) {
+		this.waitNewConnexionSendFluxWebcams.add(waitNewConnexionSendFluxWebcam);
+	}
+	public synchronized void removeWaitNewConnexionSendFluxWebcam(WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam) {
+		this.waitNewConnexionSendFluxWebcams.remove(waitNewConnexionSendFluxWebcam);
+	}
+	public synchronized WaitNewConnexionSendFluxWebcam getWaitNewConnexionSendFluxWebcam(String nameWebcam) {
+		WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam = null;
+		for (int i = 0; i < waitNewConnexionSendFluxWebcams.size(); i++) {
+			if(nameWebcam.equals(waitNewConnexionSendFluxWebcams.get(i).webcamName)){
+				waitNewConnexionSendFluxWebcam = waitNewConnexionSendFluxWebcams.get(i);
+			}
+		}
+		return waitNewConnexionSendFluxWebcam;
+	}
+	/*public synchronized void removeWaitNewConnexionSendFluxWebcam(WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam, String nameWebcam) {
+		for (int i = 0; i < connexionsFluxWebcam.size(); i++) {
+			if(nameWebcam.equals(connexionsFluxWebcam.get(i).name)){
+				connexionsFluxWebcam.get(i).removeConnexionSendFluxWebcam(connexionsSendFluxWebcam);
+			}
+		}
+	}*/
+	/*public synchronized void addConnexionSendFluxWebcam(ConnexionSendFluxWebcam connexionsSendFluxWebcam) {
 		this.connexionsSendFluxWebcam.add(connexionsSendFluxWebcam);
 	}
 	public synchronized void removeConnexionSendFluxWebcam(ConnexionSendFluxWebcam connexionsSendFluxWebcam) {
 		this.connexionsSendFluxWebcam.remove(connexionsSendFluxWebcam);
-	}
+	}*/
 	
 	/**
 	 * Envoie un message à tout les robotino

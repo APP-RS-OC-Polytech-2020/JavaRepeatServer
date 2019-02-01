@@ -4,7 +4,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-
+/**
+ * Classe qui est créée par ConnexionFluxWebcam pour gérer un client particulier.
+ * @author lalandef
+ *
+ */
 public class ConnexionSendFluxWebcam  implements Runnable {
 	private ServerRobotino serverRobotino;
 	private WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam;
@@ -16,6 +20,8 @@ public class ConnexionSendFluxWebcam  implements Runnable {
 	
 	
 	//INUTILE
+	/* Si c'est déprécié, on commente... ?
+	 * TODO Savoir ce que fait ce bout de code, s'il est utile
 	public ConnexionSendFluxWebcam(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in) {
 		try {
 			this.out = new PrintWriter(socketClient.getOutputStream(), true);
@@ -33,7 +39,7 @@ public class ConnexionSendFluxWebcam  implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("No nameWebcam found, default name set: ");
-		}*/
+		}*
 		out.println("HTTP/1.0 200 OK");
 		out.println("Connection: close");
 		out.println("Max-Age: 0");
@@ -45,9 +51,13 @@ public class ConnexionSendFluxWebcam  implements Runnable {
 		//this.run();
 
 	}
+	*/
 	
-	
-	
+	/**
+	 * Intancie une nouvelle classe, et ouvre la connexion pour y envoyer les images de webcam
+	 * @param waitNewConnexionSendFluxWebcam	la source qui a instancié la classe
+	 * @param socketClient						Le client a gérer par cette connexion
+	 */
 	public ConnexionSendFluxWebcam(WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam, Socket socketClient) {
 		try {
 			this.out = new PrintWriter(socketClient.getOutputStream(), true);
@@ -101,6 +111,11 @@ public class ConnexionSendFluxWebcam  implements Runnable {
 			e.printStackTrace();
 		}
 	}*/
+	/**
+	 * Methode pour envoyer un certain nombre de bytes sur la connexion gérée par cette classe.
+	 * Lève une IOException s'il est impossible d'écrire dans la connexion.
+	 * @param bytes	Les données a envoyer
+	 */
 	public void envoyerBytes(byte[] bytes){
 		try {
 			socketClient.getOutputStream().write(bytes);

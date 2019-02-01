@@ -6,7 +6,8 @@ import java.io.PrintWriter;
 import org.json.JSONObject;
 
 /**
- * Classe qui doit faire une connection a la webcam, et qui doit redistribuer a tout les clients.
+ * Classe qui intialise une connexion vers une webcam. Elle est intialisée par ServerRobotino pour gérer une connexion venant d'une webcam.
+ * Elle instancie/utilise ensuite WaitNewConnexionSendFluxWebcam
  * @author prospere
  *
  */

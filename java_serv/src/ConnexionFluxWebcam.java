@@ -9,7 +9,12 @@ import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * Classe qui écoute pour des connexions entrantes de clients souhaitant
+ * voir le flux de la caméra, puis qui leur instancie un ConnexionSendFluxWebcam qui s'occupe d'eux.
+ * @author lalandef
+ *
+ */
 public class ConnexionFluxWebcam implements Runnable {
 	private ServerRobotino serverRobotino;
 	WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam;

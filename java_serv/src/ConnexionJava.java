@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 /**
  * Classe gérant la connexion en java. (Surtout utilisé pour des tests)
- * 
+ * @author lalandef
  *
  */
 

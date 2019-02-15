@@ -9,7 +9,7 @@ import java.util.Properties;
  * Has a number of handy methods to get quickly stuff.
  * Grab with: configIO.getInstance.getJavaPort
  * Uses Singleton Pattern.
- * (Or whatever propertie you need)
+ * (Or whatever properties you need)
  * @author prospere
  *
  */

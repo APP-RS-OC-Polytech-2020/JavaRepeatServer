@@ -1,19 +1,19 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 import org.json.JSONObject;
 
 /**
  * Gère la connexion d'un robotino au server
+ * Classe qui écoute pour des connexions entrantes de types robotino, et qui les gère.
  * @author lalandef
  *
  */
 public class ConnexionRobotino implements Runnable {
 	private ServerRobotino serverRobotino;
+	@SuppressWarnings("unused")
 	private Socket socketClient;
 	private PrintWriter out;
 	private BufferedReader in;
@@ -48,7 +48,6 @@ public class ConnexionRobotino implements Runnable {
 	/**
 	 * Initie la connexion et attend les requête du robotino
 	 */
-	@Override
 	public void run() {
 		serverRobotino.addConnexionRobotino(this);
 		try {
@@ -92,7 +91,7 @@ public class ConnexionRobotino implements Runnable {
 	}
 	
 	/**
-	 * Envoie un message JSON aux autre utilisateur(Un ou plusieur selon ce qui est précisé dans le message)
+	 * Envoie un message JSON au Robotino géré par cette connexion
 	 * @param m message JSON à envoyer
 	 */
 	public void envoyerMessage(String m){

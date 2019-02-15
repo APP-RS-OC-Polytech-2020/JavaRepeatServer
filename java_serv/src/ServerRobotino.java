@@ -17,8 +17,6 @@ import org.json.JSONObject;
  * Classe qui represente le serveur principal.
  * Tout le monde s'y connecte, il redistribue les messages, 
  * ouvre les connexions qui vont bien toussa.
- * 
- *
  */
 public class ServerRobotino {
 	private int portServeur;
@@ -166,6 +164,11 @@ public class ServerRobotino {
 	public synchronized void removeWaitNewConnexionSendFluxWebcam(WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam) {
 		this.waitNewConnexionSendFluxWebcams.remove(waitNewConnexionSendFluxWebcam);
 	}
+	/**
+	 * Methode permettant de récuperer la classe gérant une webcam particulière.
+	 * @param nameWebcam
+	 * @return le WaitNewConnexionSendFluxWebcam qui géère la webcam qui nous interesse
+	 */
 	public synchronized WaitNewConnexionSendFluxWebcam getWaitNewConnexionSendFluxWebcam(String nameWebcam) {
 		WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam = null;
 		for (int i = 0; i < waitNewConnexionSendFluxWebcams.size(); i++) {
@@ -225,7 +228,7 @@ public class ServerRobotino {
 	}
 	
 	/**
-	 * Envoie un message à toute les connexions web
+	 * Envoie un message à toutes les connexions web
 	 * @param m message JSON
 	 */
 	public synchronized void sendToAllWeb(String m) {

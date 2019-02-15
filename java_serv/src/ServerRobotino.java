@@ -28,6 +28,7 @@ public class ServerRobotino {
 	public ArrayList<ConnexionWeb> connexionsWeb = new ArrayList<ConnexionWeb>();
 	public ArrayList<ConnexionFluxWebcam> connexionsFluxWebcam = new ArrayList<ConnexionFluxWebcam>();
 	public ArrayList<WaitNewConnexionSendFluxWebcam> waitNewConnexionSendFluxWebcams = new ArrayList<WaitNewConnexionSendFluxWebcam>();
+	public ArrayList<ConnexionSensorsDatabase> connexionsSensorsDatabase = new ArrayList<ConnexionSensorsDatabase>();
 	//public ArrayList<ConnexionSendFluxWebcam> connexionsSendFluxWebcam = new ArrayList<ConnexionSendFluxWebcam>();
 	//private ArrayList<Connexion> connexionsRobotino = new ArrayList<Connexion>();
 	public int portDispo = 50010;
@@ -76,6 +77,8 @@ public class ServerRobotino {
 									new Thread(new ConnexionWebcam(this,socketClient,firstLine,in)).start();
 								}else if(clientType.equals("GetFluxWebcam")){//connexion d'une webcam donnant du contenu
 									new Thread(new ConnexionSendFluxWebcam(this,socketClient,firstLine,in)).start();
+								}else if(clientType.equals("SensorsDatabase")){//connexion d'une webcam donnant du contenu
+									new Thread(new ConnexionSensorsDatabase(this,socketClient,firstLine,in)).start();
 								}else{//type de client non reconu
 									PrintWriter out = new PrintWriter(socketClient.getOutputStream(), true);
 									out.println("L( ¨° 3¨° )J----#:`* no socket for u");
@@ -85,6 +88,8 @@ public class ServerRobotino {
 								System.out.println("CoSR\tCapteurs: ");
 								System.out.println("CoSR\tJSON: "+firstLine);
 								sendToAllWeb(firstLine);
+								sendToAllSensorsDatabase(firstLine);
+								//socketClient.close();
 							}else{//JSON invalide
 								PrintWriter out = new PrintWriter(socketClient.getOutputStream(), true);
 								out.println("L( ¨° 3¨° )J----#:`* no socket for u");
@@ -98,15 +103,15 @@ public class ServerRobotino {
 							socketClient.close();
 						}
 					}else if(firstLine.startsWith("GET")){ //Ca commence par GET, c'est une Websocket
-						firstLine = in.readLine();
+						/*firstLine = in.readLine();
 						System.out.println("CoSR\tfirstLine: "+firstLine);
 						firstLine = in.readLine();
 						System.out.println("CoSR\tfirstLine: "+firstLine);;
-						if(firstLine.startsWith("Connection: Upgrade")){
+						if(firstLine.startsWith("Connection: Upgrade")){*/
 							new Thread(new ConnexionWeb(this,socketClient,firstLine,in)).start();
-						}else if(firstLine.startsWith("Connection: keep-alive")){
+						/*}/*else if(firstLine.startsWith("Connection: keep-alive")){
 							new Thread(new ConnexionSendFluxWebcam(this,socketClient,firstLine,in)).start();
-						}
+						}*/
 					}
 					else{
 						PrintWriter out = new PrintWriter(socketClient.getOutputStream(), true);
@@ -170,6 +175,12 @@ public class ServerRobotino {
 		}
 		return waitNewConnexionSendFluxWebcam;
 	}
+	public synchronized void addConnexionSensorsDatabase(ConnexionSensorsDatabase connexion) {
+		this.connexionsSensorsDatabase.add(connexion);
+	}
+	public synchronized void removeConnexionSensorsDatabase(ConnexionSensorsDatabase connexion) {
+		this.connexionsSensorsDatabase.remove(connexion);
+	}
 	/*public synchronized void removeWaitNewConnexionSendFluxWebcam(WaitNewConnexionSendFluxWebcam waitNewConnexionSendFluxWebcam, String nameWebcam) {
 		for (int i = 0; i < connexionsFluxWebcam.size(); i++) {
 			if(nameWebcam.equals(connexionsFluxWebcam.get(i).name)){
@@ -222,7 +233,11 @@ public class ServerRobotino {
 			connexionsWeb.get(i).envoyerMessage(m);
 		}
 	}
-	
+	public synchronized void sendToAllSensorsDatabase(String m) {
+		for (int i = 0; i < connexionsSensorsDatabase.size(); i++) {
+			connexionsSensorsDatabase.get(i).envoyerMessage(m);
+		}
+	}
 	/**
 	 * Renvoie le lien de la cam�ra du robot
 	 * @param ipRobot

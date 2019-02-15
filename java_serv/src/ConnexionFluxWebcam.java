@@ -109,11 +109,11 @@ public class ConnexionFluxWebcam implements Runnable {
 				//this.decodeurJson(inLine);
 			}
 			System.out.println("Stop ConnexionFluxWebcam");
-		} catch (IOException e) {
+		} catch (IOException e ) {
 			serverRobotino.removeConnexionFluxWebcam(this);
 			System.out.println("Crash ConnexionFluxWebcam");
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 			try {
 				clientSocket.close();
 			} catch (IOException e1) {

@@ -44,7 +44,7 @@ public class ConnexionWeb implements Runnable {
 	 */
 	@Override
 	public void run() {
-		envoyerMessage("\"type\":\"sensors\"");
+		//envoyerMessage("\"type\":\"sensors\"");
 		try {
 			String inLine =" ";
 			ipWeb=socketClient.getInetAddress().toString();
@@ -127,8 +127,8 @@ public class ConnexionWeb implements Runnable {
 			
 			System.out.println("CoW\tgetIntputStreamServer: "+message);
 			JSONObject JSON = new JSONObject(message);
-			String info = JSON.getString("infoInit");
-			System.out.println("CoW\tinfo: "+info);
+			//String info = JSON.getString("infoInit");
+			//System.out.println("CoW\tinfo: "+info);
 			try{
 				this.encodeWebSocketMessage("{\"type\":\"init\",\"infoInit\":\"Connection accepté\",\"link\":\""+serverRobotino.getLinkVideoRobot(JSON.getString("ipRobot"))+"\"}");
 			}catch(org.json.JSONException e){

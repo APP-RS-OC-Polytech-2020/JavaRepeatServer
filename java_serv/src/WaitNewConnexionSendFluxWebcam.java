@@ -22,7 +22,7 @@ public class WaitNewConnexionSendFluxWebcam implements Runnable {
 	public WaitNewConnexionSendFluxWebcam(int port,ServerRobotino serverRobotino,String webcamName,String ipWebcam,String portWebcam) {
 		//new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam, webcamName, this);
 		serverRobotino.addWaitNewConnexionSendFluxWebcam(this);
-		//System.out.println("WNCSFW\ttest1");
+		System.out.println("New Webcam:"+webcamName+", port:"+port);
 		new Thread(new ConnexionFluxWebcam(serverRobotino, ipWebcam, portWebcam, webcamName, this)).start();
 		//System.out.println("WNCSFW\ttest2");
 		this.serverRobotino = serverRobotino;

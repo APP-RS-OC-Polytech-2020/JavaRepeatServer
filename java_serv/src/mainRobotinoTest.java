@@ -18,6 +18,7 @@ public class mainRobotinoTest {
 	}
 	public static void main(String[] args) {
 		int port=50008;
+		
 		String ipServer="193.48.125.70";
 		try {
 			Socket socketRobotino = new Socket(ipServer, port);
@@ -28,6 +29,7 @@ public class mainRobotinoTest {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		System.out.println("Open testRobot");
 		//new Thread(socketRobotino).start();
 		PrintWriter out;
 		BufferedReader in;

@@ -33,16 +33,16 @@ public class ConnexionRobotino implements Runnable {
 		System.out.println("ipRobot:"+ipRobot);
 		System.out.println("CoRobo\tgetIntputStreamServer: "+firstLine);
 		JSONObject JSON = new JSONObject(firstLine);
-		String info = JSON.getString("infoInit");
 		try{
+			String info = JSON.getString("infoInit");
 			this.ipRobot = JSON.getString("ipRobot");
+			System.out.println("CoRobot\tinfo: "+info);
 		}catch(org.json.JSONException e){
 			ipRobot=socketClient.getInetAddress().toString();
 			System.out.println("CoRobot\tPas d'ip envoyé: "+e);
 			System.out.println("CoRobot\tJSON: "+firstLine);
 		}
 		System.out.println("ipRobot:"+ipRobot);
-		System.out.println("CoRobot\tinfo: "+info);
 	}
 
 	/**

@@ -73,8 +73,8 @@ public class ServerRobotino {
 									new Thread(new ConnexionRobotino(this,socketClient,firstLine,in)).start();
 								}else if(clientType.equals("Webcam")){//connexion d'une webcam donnant du contenu
 									new Thread(new ConnexionWebcam(this,socketClient,firstLine,in)).start();
-								}else if(clientType.equals("GetFluxWebcam")){//connexion d'une webcam donnant du contenu
-									new Thread(new ConnexionSendFluxWebcam(this,socketClient,firstLine,in)).start();
+								/*}else if(clientType.equals("GetFluxWebcam")){//connexion d'une webcam donnant du contenu
+									new Thread(new ConnexionSendFluxWebcam(this,socketClient,firstLine,in)).start();*/
 								}else if(clientType.equals("SensorsDatabase")){//connexion d'une webcam donnant du contenu
 									new Thread(new ConnexionSensorsDatabase(this,socketClient,firstLine,in)).start();
 								}else{//type de client non reconu

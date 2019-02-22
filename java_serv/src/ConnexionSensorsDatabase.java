@@ -8,16 +8,16 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 /**
  * Classe gérant la connexion en java. (Surtout utilisé pour des tests)
- * @author lalandef
+ * 
  *
  */
 
-public class ConnexionJava implements Runnable {
+public class ConnexionSensorsDatabase implements Runnable {
 	private ServerRobotino serverRobotino;
 	private Socket socketClient;
 	private PrintWriter out;
 	private BufferedReader in;
-	public ConnexionJava(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in) {
+	public ConnexionSensorsDatabase(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in) {
 		try {
 			this.out = new PrintWriter(socketClient.getOutputStream(), true);
 			this.in = in;
@@ -27,30 +27,27 @@ public class ConnexionJava implements Runnable {
 		}
 		this.serverRobotino=serverRobotino;
 		this.socketClient=socketClient;
-		System.out.println("CoJ\tgetIntputStreamServer: "+firstLine);
+		System.out.println("CoSDb\tgetIntputStreamServer: "+firstLine);
 		JSONObject JSON = new JSONObject(firstLine);
-		try{
-			String info = JSON.getString("infoInit");
-			System.out.println("CoRobot\tinfo: "+info);
-		}catch(org.json.JSONException e){
-		}
+		//String info = JSON.getString("infoInit");
+		//System.out.println("CoSDb\tinfo: "+info);
 	}
 	
 	/**
 	 * Initie la connexion et attend les requête de l'application Java
 	 */
 	public void run() {
-		serverRobotino.addConnexionJava(this);
+		serverRobotino.addConnexionSensorsDatabase(this);
 		try {
 			String inLine = "";
 			while(this.serverRobotino.isServerRunning()&&inLine!=null){//lecture des nouveau message
 				inLine = in.readLine();
-				System.out.println("CoJ\tgetIntputStreamServer2: "+inLine);
+				System.out.println("CoSDb\tgetIntputStreamServer2: "+inLine);
 				this.decodeurJson(inLine);
 			}
 		} catch (IOException e) {/*e.printStackTrace();*/}//connexion fermé
-		System.out.println("CoJ\ttest fin de conection par rupture de connexion: ");
-		serverRobotino.removeConnexionJava(this);
+		System.out.println("CoSDb\ttest fin de conection par rupture de connexion: ");
+		serverRobotino.removeConnexionSensorsDatabase(this);
 	}
 	
 	/**
@@ -63,19 +60,24 @@ public class ConnexionJava implements Runnable {
 		try{
 			JSONObject JSON = new JSONObject(j);
 			String type = JSON.getString("type");
-			System.out.println("CoJ\ttype:"+type);
+			System.out.println("CoSDb\ttype:"+type);
 			
 			if(type.equals("init")){//inutilisé ici, uniquement au début de la classe connexion
 				String info = JSON.getString("infoStart");
-				System.out.println("CoJ\tinfo: "+info);
+				System.out.println("CoSDb\tinfo: "+info);
 				
 			}else if(type.equals("message")){//message
 				String message = JSON.getString("message");
-				System.out.println("CoJ\tMessage: "+message);
+				System.out.println("CoSDb\tMessage: "+message);
+			}else if(type.equals("alert")){//message
+				//String message = JSON.getString("message");
+				//System.out.println("CoSDb\tMessage: "+message);
+				serverRobotino.sendToAllWeb(j);
+				serverRobotino.sendToAllRobotino(j);
 			}
 		}catch(org.json.JSONException e){
-			System.out.println("CoJ\terreur decodage JSON: "+e);
-			System.out.println("CoJ\tJSON: "+j);
+			System.out.println("CoSDb\terreur decodage JSON: "+e);
+			System.out.println("CoSDb\tJSON: "+j);
 		}
 	}
 	

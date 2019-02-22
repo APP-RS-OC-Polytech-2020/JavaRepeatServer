@@ -77,13 +77,19 @@ public class ServerRobotino {
 									new Thread(new ConnexionSendFluxWebcam(this,socketClient,firstLine,in)).start();*/
 								}else if(clientType.equals("SensorsDatabase")){//connexion d'une webcam donnant du contenu
 									new Thread(new ConnexionSensorsDatabase(this,socketClient,firstLine,in)).start();
+								}else if(clientType.equals("sensors")){//connexion d'une webcam donnant du contenu
+									System.out.println("CoSR\tsensors: ");
+									System.out.println("CoSR\tJSON: "+firstLine);
+									sendToAllWeb(firstLine);
+									sendToAllSensorsDatabase(firstLine);
+									//socketClient.close();
 								}else{//type de client non reconu
 									PrintWriter out = new PrintWriter(socketClient.getOutputStream(), true);
 									out.println("L( ¨° 3¨° )J----#:`* no socket for u");
 									socketClient.close();
 								}
-							}else if(type.equals("capteurs")){//connexion d'une webcam donnant du contenu
-								System.out.println("CoSR\tCapteurs: ");
+							}else if(type.equals("sensors")){//connexion d'une webcam donnant du contenu
+								System.out.println("CoSR\tsensors: ");
 								System.out.println("CoSR\tJSON: "+firstLine);
 								sendToAllWeb(firstLine);
 								sendToAllSensorsDatabase(firstLine);

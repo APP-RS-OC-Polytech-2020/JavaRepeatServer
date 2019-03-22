@@ -39,8 +39,6 @@ public class ServerRobotino implements Runnable {
 	
 	public void run(){
 		try {
-			//ip = InetAddress.getLocalHost ().getHostAddress ();
-			//nom = "Server Robotion v1";
 			socketServer = new ServerSocket(this.portServeur);
 			serverRunning = true;
 		} catch (UnknownHostException e) {

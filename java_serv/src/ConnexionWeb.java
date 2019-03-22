@@ -147,6 +147,8 @@ public class ConnexionWeb implements Runnable {
 				this.decodeurJson(inLine);
 			}
 		} catch (IOException e) {/*e.printStackTrace();*/}//connexion fermé
+		catch (Exception e) {e.printStackTrace();
+		System.out.println("CoW\tErreur gérée: ");}
 		System.out.println("CoW\ttest fin de conection par rupture de connexion: ");
 		serverRobotino.removeConnexionWeb(this);
 	}
@@ -177,7 +179,7 @@ public class ConnexionWeb implements Runnable {
 				int quotient=0;
 				for(int i = 2;i>0;i--){
 					quotient=(int) (messageLengthTemp/(Math.pow(256, i-1)));
-					System.out.println(i+": "+quotient+" = "+messageLengthTemp+"/"+(Math.pow(256, i-1)));
+					//System.out.println(i+": "+quotient+" = "+messageLengthTemp+"/"+(Math.pow(256, i-1)));
 					messageLengthTemp-=quotient*Math.pow(256, i-1);
 					bytes.add((byte)quotient);
 				}
@@ -188,7 +190,7 @@ public class ConnexionWeb implements Runnable {
 				int quotient=0;
 				for(int i = 8;i>0;i--){
 					quotient=(int) (messageLengthTemp/(Math.pow(256, i-1)));
-					System.out.println(i+": "+quotient+" = "+messageLengthTemp+"/"+(Math.pow(256, i-1)));
+					//System.out.println(i+": "+quotient+" = "+messageLengthTemp+"/"+(Math.pow(256, i-1)));
 					messageLengthTemp-=quotient*Math.pow(256, i-1);
 					bytes.add((byte)quotient);
 				}
@@ -229,7 +231,7 @@ public class ConnexionWeb implements Runnable {
 			System.out.println("test bytes Messages: "+bytesMessage[1]);
 			System.out.println("test bytes Messages: "+bytesMessage[2]);
 			System.out.println("test bytes Messages: "+bytesMessage[3]);*/
-			System.out.println("test bytes: "+bytes);
+			//System.out.println("test bytes: "+bytes);
 			try {
 				socketClient.getOutputStream().write(bytesRequete, 0, bytesRequete.length);
 				//socketClient.getOutputStream().write(bytesRequete, 0, bytesRequete.length);
@@ -270,7 +272,7 @@ public class ConnexionWeb implements Runnable {
         b = (byte) buf.read();
         //System.out.println("byte buffer: "+b);
         boolean masked = ((b & 0x80) != 0);
-        int payloadLength = (0x7F & b);
+        long payloadLength = (0x7F & b);
         int byteCount = 0;
         if (payloadLength == 0x7F) {
             // 8 byte extended payload length
@@ -307,8 +309,8 @@ public class ConnexionWeb implements Runnable {
 
         // Payload itself
 		System.out.println("payloadLength: "+payloadLength);
-        byte[] payload = new byte[payloadLength];//texte codé si maked==true
-        buf.read(payload,0,payloadLength);
+        byte[] payload = new byte[(int) payloadLength];//texte codé si maked==true
+        buf.read(payload,0,(int)payloadLength);
         //buf.get(frame.payload,0,payloadLength);
 
         // Demask (if needed)
@@ -338,10 +340,13 @@ public class ConnexionWeb implements Runnable {
 			}else if(type.equals("message")){//message
 				String message = JSON.getString("message");
 				System.out.println("CoW\tMessage: "+message);
-			}else if(type.equals("commande")){//message
-				System.out.println(JSON.getJSONObject("robot").getString("address"));
-				serverRobotino.sendToOneRobotino(j,JSON.getJSONObject("robot").getString("address"));
-			}else if(type.equals("commandeAll")){//message
+			}else if(type.equals("command")){//message
+				System.out.println(JSON.getJSONObject("robot").getString("ip"));
+				serverRobotino.sendToOneRobotino(j,JSON.getJSONObject("robot").getString("ip"));
+			}else if(type.equals("auto")){//mod auto/manuel
+				System.out.println(JSON.getJSONObject("robot").getString("ip"));
+				serverRobotino.sendToOneRobotino(j,JSON.getJSONObject("robot").getString("ip"));
+			}else if(type.equals("commandAll")){//message
 				serverRobotino.sendToAllRobotino(j);
 			}else if(type.equals("nameToPort")){//message
 				//{"type":"nameToPort","name":"name1" }

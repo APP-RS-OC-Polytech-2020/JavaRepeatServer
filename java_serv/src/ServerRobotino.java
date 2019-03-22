@@ -23,6 +23,7 @@ public class ServerRobotino {
 	private ServerSocket socketServer = null;
 	private ArrayList<ConnexionJava> connexionsJava = new ArrayList<ConnexionJava>();
 	private ArrayList<ConnexionRobotino> connexionsRobotino = new ArrayList<ConnexionRobotino>();
+	private ArrayList<ConnexionArduinoRobotino> connexionsArduinoRobotino = new ArrayList<ConnexionArduinoRobotino>();
 	public ArrayList<ConnexionWeb> connexionsWeb = new ArrayList<ConnexionWeb>();
 	public ArrayList<ConnexionFluxWebcam> connexionsFluxWebcam = new ArrayList<ConnexionFluxWebcam>();
 	public ArrayList<WaitNewConnexionSendFluxWebcam> waitNewConnexionSendFluxWebcams = new ArrayList<WaitNewConnexionSendFluxWebcam>();
@@ -54,6 +55,7 @@ public class ServerRobotino {
 		try {
 			System.out.println("Server lancé");
 			while(serverRunning){
+				System.out.println("CoSR\tWaitNewConnexion");
 				Socket socketClient = socketServer.accept();//Quelque chose essai de se connecter
 				//System.out.println("CoSR\ttest: ");
 				BufferedReader in = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
@@ -71,6 +73,8 @@ public class ServerRobotino {
 									new Thread(new ConnexionJava(this,socketClient,firstLine,in)).start();
 								}else if(clientType.equals("Robotino")){//connexion d'un Robotino
 									new Thread(new ConnexionRobotino(this,socketClient,firstLine,in)).start();
+								}else if(clientType.equals("ArduinoRobotino")){//connexion d'un Robotino
+									new Thread(new ConnexionArduinoRobotino(this,socketClient,firstLine,in)).start();
 								}else if(clientType.equals("Webcam")){//connexion d'une webcam donnant du contenu
 									new Thread(new ConnexionWebcam(this,socketClient,firstLine,in)).start();
 								/*}else if(clientType.equals("GetFluxWebcam")){//connexion d'une webcam donnant du contenu
@@ -152,6 +156,13 @@ public class ServerRobotino {
 	public synchronized void removeConnexionRobotino(ConnexionRobotino connexion) {
 		this.connexionsRobotino.remove(connexion);
 	}
+	public synchronized void addConnexionArduinoRobotino(ConnexionArduinoRobotino connexion) {
+		this.connexionsArduinoRobotino.add(connexion);
+		System.out.println("CRsize"+connexionsArduinoRobotino.size());
+	}
+	public synchronized void removeConnexionArduinoRobotino(ConnexionArduinoRobotino connexion) {
+		this.connexionsArduinoRobotino.remove(connexion);
+	}
 	public synchronized void addConnexionWeb(ConnexionWeb connexion) {
 		this.connexionsWeb.add(connexion);
 	}
@@ -222,14 +233,24 @@ public class ServerRobotino {
 	public synchronized void sendToOneRobotino(String m, String ip) {
 		boolean found=false;
 		for (int i = 0; i < connexionsRobotino.size(); i++) {
+			System.out.println("ip du robot testé:"+connexionsRobotino.get(i).ipRobot+"   ip du robot recherché"+ip);
 			if(connexionsRobotino.get(i).ipRobot.equals(ip)){
 				connexionsRobotino.get(i).envoyerMessage(m);
 				System.out.println("Envoyé à "+ip);
 				found=true;
 			}
 		}
+		for (int i = 0; i < connexionsArduinoRobotino.size(); i++) {
+			System.out.println("ip du robot testé:"+connexionsArduinoRobotino.get(i).ipRobot+"   ip du ArduinoRobot recherché"+ip);
+			if(connexionsArduinoRobotino.get(i).ipRobot.equals(ip)){
+				connexionsArduinoRobotino.get(i).envoyerMessage(m);
+				System.out.println("Envoyé à "+ip);
+				found=true;
+			}
+		}
 		if(!found){
 			System.out.println("Aucun robot trouvé");
+			//this.sendToAllRobotino(m);
 		}
 	}
 	

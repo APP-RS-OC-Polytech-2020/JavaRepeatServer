@@ -25,6 +25,7 @@ public class ConnexionWeb implements Runnable {
 	public PrintWriter out;
 	private BufferedReader in;
 	public String ipWeb;
+	public int nbZero=0;
 	public ConnexionWeb(ServerRobotino serverRobotino, Socket socketClient, String firstLine, BufferedReader in) {
 		try {
 			this.out = new PrintWriter(socketClient.getOutputStream(), true);
@@ -287,11 +288,15 @@ public class ConnexionWeb implements Runnable {
 
         // Decode Payload Length
         while (byteCount-- > 0){
-        	b = (byte) buf.read();
+        	b = ((byte) buf.read());
+        	//System.out.println("b: "+b+", (b & 0xFF):"+(b & 0xFF)+", (8 * byteCount):"+(8 * byteCount)+", byteCount:"+byteCount);
             //System.out.println("payloadLength1: "+payloadLength+", "+((b & 0xFF) << (8 * byteCount))+", "+(b & 0xFF)+", "+(8 * byteCount));
-        	payloadLength += (b & 0xFF) << (8 * byteCount);
+            //System.out.println("payloadLength1: "+payloadLength+", "+((b & 0xFF) << (8 * byteCount))%16777216+", "+(b & 0xFF)+", "+(8 * byteCount));
+        	payloadLength += ((b & 0xFF) << (8 * byteCount));//%16777216;
         }
-
+        
+        
+        
         // TODO: add control frame payload length validation here
 
         byte maskingKey[] = null;
@@ -316,8 +321,14 @@ public class ConnexionWeb implements Runnable {
         // Demask (if needed)
         if (masked){
             for (int i = 0; i < payload.length; i++){
+            	/*if(payload[i]!=0){
+            		System.out.print(payload[i]+" ");
+            	}else{
+            		nbZero+=1;
+            	}*/
                 payload[i] ^= (maskingKey[i % 4] & 0xFF);
             }
+            //System.out.println("nbZero:"+nbZero);
         }
 		message=new String(payload, "UTF-8");
 		return message;

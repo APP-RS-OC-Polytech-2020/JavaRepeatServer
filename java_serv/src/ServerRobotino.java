@@ -2,24 +2,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 import org.json.JSONObject;
+
+import picocli.CommandLine.Option;
 
 /**
  * Classe qui represente le serveur principal.
  * Tout le monde s'y connecte, il redistribue les messages, 
  * ouvre les connexions qui vont bien toussa.
  */
-public class ServerRobotino {
-	private int portServeur;
+public class ServerRobotino implements Runnable {
 	private ServerSocket socketServer = null;
 	private ArrayList<ConnexionJava> connexionsJava = new ArrayList<ConnexionJava>();
 	private ArrayList<ConnexionRobotino> connexionsRobotino = new ArrayList<ConnexionRobotino>();
@@ -28,19 +26,21 @@ public class ServerRobotino {
 	public ArrayList<ConnexionFluxWebcam> connexionsFluxWebcam = new ArrayList<ConnexionFluxWebcam>();
 	public ArrayList<WaitNewConnexionSendFluxWebcam> waitNewConnexionSendFluxWebcams = new ArrayList<WaitNewConnexionSendFluxWebcam>();
 	public ArrayList<ConnexionSensorsDatabase> connexionsSensorsDatabase = new ArrayList<ConnexionSensorsDatabase>();
-	//public ArrayList<ConnexionSendFluxWebcam> connexionsSendFluxWebcam = new ArrayList<ConnexionSendFluxWebcam>();
-	//private ArrayList<Connexion> connexionsRobotino = new ArrayList<Connexion>();
-	public int portDispo = 50010;
 	HashMap<String,Integer> mapNameWebcam_Port = new HashMap<String, Integer>();
-
-	//private Thread t1;
-	private boolean serverRunning = true;
-	public ServerRobotino(int port) {
+	private boolean serverRunning;
+	
+	//Config stuff
+	@Option(names = {"--portDisp","-pd"}, description = "Sets which port is available for camera restreaming. Needs to have the following port open as well for multiple cameras (default: ${DEFAULT-VALUE}).")
+	public int portDispo = 50010;
+	@Option(names = {"--port","-p"}, description = "Sets on which port the server will listen for incoming connexions (default: ${DEFAULT-VALUE}). ")
+	private int portServeur = 50008;
+	
+	public ServerRobotino() {}
+	
+	public void run(){
 		try {
-			this.portServeur=port;
-			//ip = InetAddress.getLocalHost ().getHostAddress ();
-			//nom = "Server Robotion v1";
 			socketServer = new ServerSocket(this.portServeur);
+			serverRunning = true;
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -48,6 +48,7 @@ public class ServerRobotino {
 		}
 		this.waitNewConnexion();
 	}
+	
 	/**
 	 * Attend les connexions puis les analyse pour savoir si c'est une connexion web, robotino où autre
 	 */
@@ -284,5 +285,13 @@ public class ServerRobotino {
 		//return "http://tp-epu.univ-savoie.fr/~prospere/img.png";
 		//return "193.48.125.71:1337";
 		return "193.48.125.70:50008";
+	}
+
+	public int getPortServeur() {
+		return portServeur;
+	}
+	
+	public void setPortServeur(int portServeur) {
+		this.portServeur = portServeur;
 	}
 }

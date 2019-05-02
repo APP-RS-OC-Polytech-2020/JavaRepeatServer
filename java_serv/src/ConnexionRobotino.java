@@ -6,8 +6,8 @@ import java.net.Socket;
 import org.json.JSONObject;
 
 /**
- * Gère la connexion d'un robotino au server
- * Classe qui écoute pour des connexions entrantes de types robotino, et qui les gère.
+ * GÃ¨re la connexion d'un robotino au server
+ * Classe qui Ã©coute pour des connexions entrantes de types robotino, et qui les gÃ¨re.
  * @author lalandef
  *
  */
@@ -23,7 +23,7 @@ public class ConnexionRobotino implements Runnable {
 		try {
 			this.out = new PrintWriter(socketClient.getOutputStream(), true);
 			this.in = in;
-			out.println("{\"type\":\"init\",\"infoInit\":\"Connection accepté\"}");
+			out.println("{\"type\":\"init\",\"infoInit\":\"Connection acceptÃ©\"}");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -39,14 +39,14 @@ public class ConnexionRobotino implements Runnable {
 			System.out.println("CoRobot\tinfo: "+info);
 		}catch(org.json.JSONException e){
 			ipRobot=socketClient.getInetAddress().toString();
-			System.out.println("CoRobot\tPas d'ip envoyé: "+e);
+			System.out.println("CoRobot\tPas d'ip envoyÃ©: "+e);
 			System.out.println("CoRobot\tJSON: "+firstLine);
 		}
 		System.out.println("ipRobot:"+ipRobot);
 	}
 
 	/**
-	 * Initie la connexion et attend les requête du robotino
+	 * Initie la connexion et attend les requÃªte du robotino
 	 */
 	public void run() {
 		serverRobotino.addConnexionRobotino(this);
@@ -57,7 +57,7 @@ public class ConnexionRobotino implements Runnable {
 				System.out.println("CoRobo\tgetIntputStreamServer2: "+inLine);
 				this.decodeurJson(inLine);
 			}
-		} catch (IOException e) {/*e.printStackTrace();*/}//connexion fermé
+		} catch (IOException e) {/*e.printStackTrace();*/}//connexion fermÃ©
 		System.out.println("CoRobo\ttest fin de conection par rupture de connexion: ");
 		serverRobotino.removeConnexionRobotino(this);
 	}
@@ -73,15 +73,15 @@ public class ConnexionRobotino implements Runnable {
 			String type = JSON.getString("type");
 			System.out.println("CoRobo\ttype:"+type);
 			
-			if(type.equals("init")){//inutilisé ici, uniquement au début de la classe connexion
+			if(type.equals("init")){//inutilisÃ© ici, uniquement au dÃ©but de la classe connexion
 				String info = JSON.getString("infoStart");
 				System.out.println("CoRobo\tinfo: "+info);
 				
 			}else if(type.equals("message")){//message
 				String message = JSON.getString("message");
 				System.out.println("CoRobo\tMessage: "+message);
-			/*}else if(type.equals("RobotArduino")){//message
-				serverRobotino.sendToOneRobotArduino(j);*/
+			}else if(type.equals("RobotArduino")){//message
+				serverRobotino.sendToOneRobotArduino(j);
 			}else if(type.equals("video")){//message
 				linkVideo= JSON.getString("link");
 				serverRobotino.sendToAllWeb(j);
@@ -93,8 +93,8 @@ public class ConnexionRobotino implements Runnable {
 	}
 	
 	/**
-	 * Envoie un message JSON au Robotino géré par cette connexion
-	 * @param m message JSON à envoyer
+	 * Envoie un message JSON au Robotino gÃ©rÃ© par cette connexion
+	 * @param m message JSON Ã  envoyer
 	 */
 	public void envoyerMessage(String m){
 		out.println(m);
